@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script
+      crossorigin="anonymous"
+      src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"
+    ></script>
+    <style>
+      html,
+      body {
+        height: 100%;
+        background-color: midnightblue;
+      }
+      /* Response message style */
+      .markdown {
+        background: #000 !important;
+        border-radius: 50px !important;
+        color: #fff !important;
+        padding: 30px !important;
+        font-weight: 900;
+        font-size: 20px;
+      }
+
+      .webchat__bubble__content {
+        border: none !important;
+      }
+      /* sending message style */
+      p.plain {
+        background: #2e7109 !important;
+        border-radius: 50px !important;
+        color: #fff !important;
+        font-weight: 900;
+        font-size: 20px;
+      }
+      .ac-container.ac-adaptiveCard {
+        background: #ffd209;
+      }
+      .webchat__icon-button {
+        display: none;
+      }
+      .main div:nth-child(1) {
+        display: none;
+      }
+      #webchat {
+        height: 85%;
+        width: 43%;
+        height: 100vh;
+        float: right;
+        clear: both;
+        background: midnightblue;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="webchat" role="main"></div>
+    <script>
+      (async function () {
+        // Note, for the simplicity of this example, we are generating the Direct Line token on client side;
+        // however, this is not a recommended practice and you should create and manage your tokens from the server.
+        // You should never put the Direct Line secret in the browser or client app.
+        // https://docs.microsoft.com/en-us/azure/bot-service/rest-api/bot-framework-rest-direct-line-3-0-authentication
+        const secret =
+          "rQNLF53tL7s.0NMqGMHKUktFwAME2QAFPLLcIGsUmjjulYL4B3SdwXg";
+        const res = await fetch(
+          "https://directline.botframework.com/v3/directline/tokens/generate",
+          {
+            body: JSON.stringify({
+              user: { id: "demo_user_id", name: "Demo" },
+            }),
+            headers: {
+              Authorization: `Bearer ${secret}`,
+              "Content-type": "application/json",
+            },
+            method: "POST",
+          }
+        );
+        const { token } = await res.json();
+        const styleOptions = {
+          botAvatarImage: "./bot.png",
+          avatarSize: 35,
+        };
+
+        window.WebChat.renderWebChat(
+          {
+            directLine: window.WebChat.createDirectLine({ token }),
+            locale: "en",
+            styleOptions,
+            userID: "demo_user_id",
+            username: "Demo",
+          },
+          document.getElementById("webchat")
+        );
+
+        document.querySelector("#webchat > *").focus();
+      })().catch((err) => console.error(err));
+      // window.WebChat.renderWebChat(
+      //   {
+      //     directLine: window.WebChat.createDirectLine({
+      //       token: 'eZ5THXyG268.o9BRYM2-GLXh_rcoIlRiDagA6pboeHAJy3DUpaEolsw'
+      //     }),
+      //     userID: 'Demo_bot_user',
+      //     username: 'Demo',
+      //     locale: 'en'
+      //   },
+      //   document.getElementById('webchat')
+      // );
+    </script>
+  </body>
+</html>
