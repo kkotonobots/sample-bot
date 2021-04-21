@@ -12,8 +12,8 @@ require('@babel/register')({
 });
 const app = express();
   let auth = {};
-      auth.appId = process.env.appId || '48bb5ee4-49bf-41e1-9fb9-fe76d884645c'
-      auth.appPassword = process.env.appPassword || '-Z5rHo~5F98.Jhwf8H_oPGp5B_Qk9_Ns-y'
+      auth.appId = process.env.appId || '0af77574-f91a-4cf8-b0df-f8829e30b978'
+      auth.appPassword = process.env.appPassword || '.pQbj2rr2JT9NlS40JFt_~q9PgZR.1DDoe'
   let adapter = new BotFrameworkAdapter(auth)
   const storage = new MemoryStorage()
   const conversationState = new ConversationState(storage)

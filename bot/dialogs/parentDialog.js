@@ -100,134 +100,136 @@ export class parentDialog extends ComponentDialog{
           if(!that.dialogs.find('qnaDialog')) {
            that.dialogs.add(new WaterfallDialog('qnaDialog',[async (step)=> {
                context = step.context
-               let finalAnswer, cardName,inputCard,attachments = [] ;
-               let qnaResults = await this.getQnaMakerResult(context.activity.text);
-                   qnaResults = qnaResults.filter(a=>a.score>20)
-                let smallTalkAns = qnaResults.filter(a=>{
-                    if(!a.metadata || a.metadata.length ==0) return false
-                    return a.metadata.find(tag=>tag.name == 'editorial' && tag.value == 'chitchat')
-                }) 
-                let nonSmallTalkAns = qnaResults.filter(a=>{
-                    if(!a.metadata || a.metadata.length ==0) return true
-                    return a.metadata.find(tag=> !tag.value || tag.value !== 'chitchat')
-                }) 
-                let isSmallTalk = smallTalkAns && smallTalkAns.length>0 && smallTalkAns[0].score >99 ? true : false
-                if(isSmallTalk) finalAnswer = smallTalkAns[0].answer
-                else if(nonSmallTalkAns && nonSmallTalkAns.length>0 && nonSmallTalkAns[0].metadata.find(tag=>tag.name ==='flow')){
-                    //cardName = nonSmallTalkAns[0].metadata[0].value
-                    finalAnswer = nonSmallTalkAns[0].answer
-                }
-                else finalAnswer = nonSmallTalkAns && nonSmallTalkAns.length>0? nonSmallTalkAns[0].answer: null
-               if (finalAnswer) {
-                   if(finalAnswer && isSmallTalk) {
-                    await context.sendActivity(finalAnswer);
-                    return await step.endDialog({});
-                   }
+               await context.sendActivity(`Hey i am demo bot you can try me sending email.`);
+                return await step.endDialog();
+            //    let finalAnswer, cardName,inputCard,attachments = [] ;
+            //    let qnaResults = await this.getQnaMakerResult(context.activity.text);
+            //        qnaResults = qnaResults.filter(a=>a.score>20)
+            //     let smallTalkAns = qnaResults.filter(a=>{
+            //         if(!a.metadata || a.metadata.length ==0) return false
+            //         return a.metadata.find(tag=>tag.name == 'editorial' && tag.value == 'chitchat')
+            //     }) 
+            //     let nonSmallTalkAns = qnaResults.filter(a=>{
+            //         if(!a.metadata || a.metadata.length ==0) return true
+            //         return a.metadata.find(tag=> !tag.value || tag.value !== 'chitchat')
+            //     }) 
+            //     let isSmallTalk = smallTalkAns && smallTalkAns.length>0 && smallTalkAns[0].score >99 ? true : false
+            //     if(isSmallTalk) finalAnswer = smallTalkAns[0].answer
+            //     else if(nonSmallTalkAns && nonSmallTalkAns.length>0 && nonSmallTalkAns[0].metadata.find(tag=>tag.name ==='flow')){
+            //         //cardName = nonSmallTalkAns[0].metadata[0].value
+            //         finalAnswer = nonSmallTalkAns[0].answer
+            //     }
+            //     else finalAnswer = nonSmallTalkAns && nonSmallTalkAns.length>0? nonSmallTalkAns[0].answer: null
+            //    if (finalAnswer) {
+            //        if(finalAnswer && isSmallTalk) {
+            //         await context.sendActivity(finalAnswer);
+            //         return await step.endDialog({});
+            //        }
                 // if(cardName == 'applyjob_pe' || cardName == 'applyjob_sy') inputCard = true
-                cardName = 'clubCard';
-                console.log(clubCard)
-                if(cardName) {
-                    let n= 5
-                    let emailJson,phoneJson,websiteJson,mapJson
-                    let dynamicJSON =   {
-                        "type": "Column",
-                        "width": "stretch",
-                        "items": [
-                            {
-                                "type": "TextBlock",
-                                "text": "",
-                                "wrap": true,
-                                "size": "Large",
-                                "weight": "Bolder",
-                                "isVisible": true
-                            }
-                        ]
-                    }
-                    let webJson =    {
-                        "type": "TextBlock",
-                        "text": "",
-                        "wrap": true,
-                        "size": "Medium",
-                        "fontType": "Default",
-                        "isSubtle": true,
-                        "isVisible": true
-                    }
-                    if(nonSmallTalkAns.length<n) n= nonSmallTalkAns.length
-                    await forEach(nonSmallTalkAns, async (ee, i)=>{                        
-                        let clubCard1 = JSON.parse(JSON.stringify(clubCard));
-                        let dynamicJSONe = JSON.parse(JSON.stringify(dynamicJSON))
-                        let dynamicJSONp = JSON.parse(JSON.stringify(dynamicJSON))
-                        let dynamicJSONm = JSON.parse(JSON.stringify(dynamicJSON))
-                        let webJsonw = JSON.parse(JSON.stringify(webJson))
+                // cardName = 'clubCard';
+                // console.log(clubCard)
+                // if(cardName) {
+                //     let n= 5
+                //     let emailJson,phoneJson,websiteJson,mapJson
+                //     let dynamicJSON =   {
+                //         "type": "Column",
+                //         "width": "stretch",
+                //         "items": [
+                //             {
+                //                 "type": "TextBlock",
+                //                 "text": "",
+                //                 "wrap": true,
+                //                 "size": "Large",
+                //                 "weight": "Bolder",
+                //                 "isVisible": true
+                //             }
+                //         ]
+                //     }
+                //     let webJson =    {
+                //         "type": "TextBlock",
+                //         "text": "",
+                //         "wrap": true,
+                //         "size": "Medium",
+                //         "fontType": "Default",
+                //         "isSubtle": true,
+                //         "isVisible": true
+                //     }
+                //     if(nonSmallTalkAns.length<n) n= nonSmallTalkAns.length
+                //     await forEach(nonSmallTalkAns, async (ee, i)=>{                        
+                //         let clubCard1 = JSON.parse(JSON.stringify(clubCard));
+                //         let dynamicJSONe = JSON.parse(JSON.stringify(dynamicJSON))
+                //         let dynamicJSONp = JSON.parse(JSON.stringify(dynamicJSON))
+                //         let dynamicJSONm = JSON.parse(JSON.stringify(dynamicJSON))
+                //         let webJsonw = JSON.parse(JSON.stringify(webJson))
 
-                        let longitude, latitude
-                        if(i>n) return
-                        clubCard1.body[0].items[0].text =ee.answer
-                        clubCard1.body[1].columns[0].items[0].text =ee.questions[0]
-                        ee.metadata.forEach(tag => {
-                            if(tag.name=='phone'){
-                                if(context.activity.channelId=='directline')
-                                phoneJson = "[Call](mailto:"+tag.value.replace(/ /g,'')+")\n"
-                                else 
-                              phoneJson = "[Call](tel:"+tag.value.replace(/ /g,'')+")\n"
-                            }
-                            if(tag.name=='email'){
-                                emailJson = "[Email](mailto:"+tag.value+")\n"
-                            }
-                            if(tag.name == 'longitude'){
-                                longitude = tag.value
-                                mapJson = "[Map](https://www.google.com/maps/search/?api=1&query="+latitude+","+longitude+")"
-                            }
-                            if(tag.name == 'latitude'){
-                                latitude = tag.value
-                                mapJson = "[Map](https://www.google.com/maps/search/?api=1&query="+latitude+","+longitude+")"
+                //         let longitude, latitude
+                //         if(i>n) return
+                //         clubCard1.body[0].items[0].text =ee.answer
+                //         clubCard1.body[1].columns[0].items[0].text =ee.questions[0]
+                //         ee.metadata.forEach(tag => {
+                //             if(tag.name=='phone'){
+                //                 if(context.activity.channelId=='directline')
+                //                 phoneJson = "[Call](mailto:"+tag.value.replace(/ /g,'')+")\n"
+                //                 else 
+                //               phoneJson = "[Call](tel:"+tag.value.replace(/ /g,'')+")\n"
+                //             }
+                //             if(tag.name=='email'){
+                //                 emailJson = "[Email](mailto:"+tag.value+")\n"
+                //             }
+                //             if(tag.name == 'longitude'){
+                //                 longitude = tag.value
+                //                 mapJson = "[Map](https://www.google.com/maps/search/?api=1&query="+latitude+","+longitude+")"
+                //             }
+                //             if(tag.name == 'latitude'){
+                //                 latitude = tag.value
+                //                 mapJson = "[Map](https://www.google.com/maps/search/?api=1&query="+latitude+","+longitude+")"
 
-                            }
-                            if(tag.name == 'website'){
-                                websiteJson = "[Visit Website]("+tag.value.replace('~',':')+")\n\n"
-                            }
+                //             }
+                //             if(tag.name == 'website'){
+                //                 websiteJson = "[Visit Website]("+tag.value.replace('~',':')+")\n\n"
+                //             }
 
-                        });
-                        if(mapJson) {
-                            dynamicJSONm.items[0].text = mapJson
-                            clubCard1.body[2].columns.push(dynamicJSONm)
-                            mapJson = null
-                        }
-                        if(emailJson){
-                            dynamicJSONe.items[0].text = emailJson
-                            clubCard1.body[2].columns.push(dynamicJSONe);
-                            emailJson = null
-                        }
-                       if(phoneJson) {
-                        dynamicJSONp.items[0].text = phoneJson
-                        clubCard1.body[2].columns.push(dynamicJSONp)
-                        phoneJson = null
-                       }
-                       if(websiteJson){
-                        webJsonw.text = websiteJson
-                         clubCard1.body[1].columns[0].items[1].columns[1].items.push(webJsonw)
-                       }
-                       websiteJson = null
-                       attachments.push(this.createCard(clubCard1))
-                    })
+                //         });
+                //         if(mapJson) {
+                //             dynamicJSONm.items[0].text = mapJson
+                //             clubCard1.body[2].columns.push(dynamicJSONm)
+                //             mapJson = null
+                //         }
+                //         if(emailJson){
+                //             dynamicJSONe.items[0].text = emailJson
+                //             clubCard1.body[2].columns.push(dynamicJSONe);
+                //             emailJson = null
+                //         }
+                //        if(phoneJson) {
+                //         dynamicJSONp.items[0].text = phoneJson
+                //         clubCard1.body[2].columns.push(dynamicJSONp)
+                //         phoneJson = null
+                //        }
+                //        if(websiteJson){
+                //         webJsonw.text = websiteJson
+                //          clubCard1.body[1].columns[0].items[1].columns[1].items.push(webJsonw)
+                //        }
+                //        websiteJson = null
+                //        attachments.push(this.createCard(clubCard1))
+                //     })
                   
 
                     
-                    // if(cardName == 'facilities_pe' || cardName == 'facilities_sy') {
-                        await context.sendActivity("Here are the Result(s) -")
-                        await context.sendActivity({attachments: attachments,
-                        attachmentLayout: AttachmentLayoutTypes.Carousel})
-                    // } else {
-                    //     await context.sendActivity({attachments: [
-                    //         this.createCard(cardName),
-                    //         this.createCard(cardName),
-                    //         this.createCard(cardName)   
-                    //     ]
-                    //  })
-                    //}
-                    return await step.endDialog();
+                //     // if(cardName == 'facilities_pe' || cardName == 'facilities_sy') {
+                //         await context.sendActivity("Here are the Result(s) -")
+                //         await context.sendActivity({attachments: attachments,
+                //         attachmentLayout: AttachmentLayoutTypes.Carousel})
+                //     // } else {
+                //     //     await context.sendActivity({attachments: [
+                //     //         this.createCard(cardName),
+                //     //         this.createCard(cardName),
+                //     //         this.createCard(cardName)   
+                //     //     ]
+                //     //  })
+                //     //}
+                //     return await step.endDialog();
 
-                }
+                // }
                 // if(!isSmallTalk && !inputCard) {
                 //     return await step.prompt('choiceCard', {
                 //         prompt: 'Did that help?',
@@ -240,15 +242,10 @@ export class parentDialog extends ComponentDialog{
                
                 //await dialogContext.prompt('choiceCard',{prompt: 'Did that help?'})
             // If no answers were returned from QnA Maker, reply with help.
-            } else {
-                await context.sendActivity(`Sorry! I am unable to find a match for 
-                this. \n\n I am only a young bot and I am still learning. 
-                \n\n You can ask me questions like:- 
-                \n\n Where can I find a club at Blackall QLD? 
-                \n\n What’s the address of Naracoorte Pistol Club? 
-                \n\n Or \n\n Type the name of Club or Location.`);
-                return await step.endDialog();
-            }
+            // } else {
+            //     await context.sendActivity(`Hey i am demo bot you can try me sending email.`);
+            //     return await step.endDialog();
+            // }
            },async (step)=>{
                let value = step.result && step.result.value?step.result.value:''
                context = step.context
